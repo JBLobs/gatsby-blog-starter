@@ -1,6 +1,7 @@
 require('dotenv').config();
 const errDesc = require('./semrushErrorList');
 const howto = require('./semrushHowto');
+const salesforce = require('./salesforce');
 const axios = require('axios').default;
 const api_key = process.env.API_KEY;
 export default async function semrush (event, context){
@@ -8,7 +9,6 @@ export default async function semrush (event, context){
     const watchErr = [];
     const prod = true; 
     const HTML_RESPONSE = true;
-    const  URL  = process.env.LAMDA_URL
     const domainCheck = [131, 132, 135]       
     let payload={tasks:[]};
     if(!event.query.id){
@@ -142,16 +142,15 @@ export default async function semrush (event, context){
     }
     
     try{
-        console.log("Semrush payload ",URL, payload.tasks.length);
+        console.log("Semrush payload ", payload.tasks.length);
 
         if(payload.tasks.length){
-            SFpromise = await axios.post(`${URL}/api/salesforce`, payload)
-            console.log("aaaa",SFpromise);
+            let tasks =  await salesforce(payload.tasks)
         }
             
        // console.log(SFpromise);
     }catch(e){
-        console.log("SF ERROR", e.data);
+        console.log("SF ERROR", e);
     }
     context.status(200).send(`
     <html>
