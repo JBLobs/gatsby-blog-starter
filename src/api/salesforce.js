@@ -1,5 +1,4 @@
 var axios = require("axios").default;
-const jsforce = require('jsforce');
 //0053F000007Km5mQAC - jbarrios-test@lobstermarketing.com.partial
 //0053F0000078zrBQAQ - jorge@lobstermarketing.com.partial
 ///005f4000003pHIJ - austin@pcocentral.com.partial
