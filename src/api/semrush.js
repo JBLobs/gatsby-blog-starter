@@ -147,20 +147,22 @@ export default async function semrush (event, context){
         if(payload.tasks.length){
             let tasks =  await salesforce(payload.tasks)
         }
-            
+        
+        context.status(200).send(`
+            <html>
+                <body>  
+                    <h1>${payload.project_name}</h1>  
+                    <div>Snapshot ID - ${currentSnapshot}</div>
+                    <div>Errors : <br /> ${detailsHtml} </div>
+                    <div>${htmlView}<div>
+                </body>
+            </html>`)
        // console.log(SFpromise);
     }catch(e){
         console.log("SF ERROR", e);
+        context.status(500).send(e)
     }
-    context.status(200).send(`
-    <html>
-        <body>  
-            <h1>${payload.project_name}</h1>  
-            <div>Snapshot ID - ${currentSnapshot}</div>
-            <div>Errors : <br /> ${detailsHtml} </div>
-            <div>${htmlView}<div>
-        </body>
-    </html>`)
+    
     
     
 }

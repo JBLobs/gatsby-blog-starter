@@ -54,7 +54,7 @@ const salesforce = async function salesforce (tsks) {
     let r = await createTasks(payloadTasks, auth);
     payloadTasks = [];
     console.log("Promise All response");
-    //context.status(200).send();
+
 }
 
 async function  createTasks (tasks, auth){
