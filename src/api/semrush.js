@@ -3,7 +3,7 @@ const errDesc = require('./semrushErrorList');
 const howto = require('./semrushHowto');
 const axios = require('axios').default;
 const api_key = process.env.API_KEY;
-exports.handler = async (event, context) => {
+export default function handler (event, context){
     
     const watchErr = [];
     const prod = true; 
