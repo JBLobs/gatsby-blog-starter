@@ -3,23 +3,23 @@ const errDesc = require('./semrushErrorList');
 const howto = require('./semrushHowto');
 const axios = require('axios').default;
 const api_key = process.env.API_KEY;
-export default function handler (event, context){
+export default async function semrush (event, context){
     
     const watchErr = [];
     const prod = true; 
     const HTML_RESPONSE = true;
-    const { URL } = process.env
+    const  URL  = process.env.LAMDA_URL
     const domainCheck = [131, 132, 135]       
     let payload={tasks:[]};
-
-    if(!event.queryStringParameters.id){
+    if(!event.query.id){
         return {
             statusCode: 404,
             body: 'empty body'
         }
     }   
-    const project_id = event.queryStringParameters.id;
-    payload['account'] =  event.queryStringParameters.account || null;
+    
+    const project_id = event.query.id;
+    payload['account'] =  event.query.account || null;
     let projectPromise;
     const projectInfo = `https://api.semrush.com/management/v1/projects/${project_id}?key=${api_key}`;
     try {
@@ -142,28 +142,27 @@ export default function handler (event, context){
     }
     
     try{
-        console.log("Semrush payload ", payload.tasks.length);
+        console.log("Semrush payload ",URL, payload.tasks.length);
 
-        // if(payload.tasks.length)
-        //     SFpromise = await axios.post(`${URL}/.netlify/functions/salesforce`, payload)
+        if(payload.tasks.length){
+            SFpromise = await axios.post(`${URL}/api/salesforce`, payload)
+            console.log("aaaa",SFpromise);
+        }
+            
        // console.log(SFpromise);
     }catch(e){
         console.log("SF ERROR", e.data);
     }
-    return ({
-        statusCode:200, 
-        body:
-        `<html>
-            <body>  
-                <h1>${payload.project_name}</h1>  
-                <div>Snapshot ID - ${currentSnapshot}</div>
-                <div>Errors : <br /> ${detailsHtml} </div>
-                <div>${htmlView}<div>
-            </body>
-        </html>`
-    }
-        
-    )
+    context.status(200).send(`
+    <html>
+        <body>  
+            <h1>${payload.project_name}</h1>  
+            <div>Snapshot ID - ${currentSnapshot}</div>
+            <div>Errors : <br /> ${detailsHtml} </div>
+            <div>${htmlView}<div>
+        </body>
+    </html>`)
+    
     
 }
 

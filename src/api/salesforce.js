@@ -2,7 +2,7 @@ var axios = require("axios").default;
 //0053F000007Km5mQAC - jbarrios-test@lobstermarketing.com.partial
 //0053F0000078zrBQAQ - jorge@lobstermarketing.com.partial
 ///005f4000003pHIJ - austin@pcocentral.com.partial
-exports.handler = async (event, context) => {
+export default async function salesforce (event, context) {
     let randomNumb =  Math.floor(100000 + Math.random() * 900000);
     let tasks = null;
     let project_name = null;
@@ -56,12 +56,7 @@ exports.handler = async (event, context) => {
     let r = await createTasks(payloadTasks, auth);
     payloadTasks = [];
     //console.log("Promise All response", r.data);
-
-    return {
-        statusCode:200,
-        //body:JSON.stringify(r.data);
-        body: "ok"
-    }
+    context.status(200).send('ok');
 }
 
 async function  createTasks (tasks, auth){
